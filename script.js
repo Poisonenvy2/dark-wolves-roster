@@ -4,7 +4,7 @@ let allMembers = [];
 
 // CHANGE THIS TO YOUR ACTUAL WORKER URL
 const WORKER_URL =
-    "https://YOUR-WORKER-NAME.YOUR-SUBDOMAIN.workers.dev";
+    "https://dark-wolves-api.lowesfamily.workers.dev";
 
 async function loadRoster() {
 
