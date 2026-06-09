@@ -189,6 +189,5 @@ header p {
 }
 
 .member-count::after {
-    content: " Members";
-    opacity: 0.8;
+    content: "";
 }
