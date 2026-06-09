@@ -98,7 +98,8 @@ function renderRoster(members) {
         );
 
     }
-
+document.getElementById("memberCount").innerHTML =
+    `${filteredMembers.length} members found`;
     filteredMembers.forEach(member => {
 
         const character = member.character;
