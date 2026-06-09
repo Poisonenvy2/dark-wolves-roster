@@ -1,102 +1,95 @@
-const members = [
-  {
-    name: "Fenris",
-    class: "warrior",
-    rank: "Guild Master",
-    ilvl: 528,
-    rio: 3120,
-    image: "https://render.worldofwarcraft.com/eu/character/tarren-mill/1/placeholder.jpg"
-  },
-  {
-    name: "Lunara",
-    class: "mage",
-    rank: "Officer",
-    ilvl: 524,
-    rio: 2950,
-    image: "https://render.worldofwarcraft.com/eu/character/tarren-mill/2/placeholder.jpg"
-  },
-  {
-    name: "Nyx",
-    class: "demon-hunter",
-    rank: "Raider",
-    ilvl: 521,
-    rio: 2804,
-    image: "https://render.worldofwarcraft.com/eu/character/tarren-mill/3/placeholder.jpg"
-  }
-];
+const CLIENT_ID = "4232041d22064ebf8d047be3a36f0601";
+const CLIENT_SECRET = "3lqEHSEheOLPsviieV2VdsyNqQ9serSG";
+
+const GUILD_REALM = "tarren-mill";
+const GUILD_NAME = "dark-wolves";
 
 const roster = document.getElementById("roster");
-const search = document.getElementById("search");
-const classFilter = document.getElementById("classFilter");
 
-const classNames = [...new Set(members.map(m => m.class))];
+async function getAccessToken() {
 
-classNames.forEach(c => {
-  const option = document.createElement("option");
-  option.value = c;
-  option.textContent = c;
-  classFilter.appendChild(option);
-});
+    const response = await fetch(
+        "https://oauth.battle.net/token",
+        {
+            method: "POST",
+            headers: {
+                "Authorization": "Basic " + btoa(CLIENT_ID + ":" + CLIENT_SECRET),
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: "grant_type=client_credentials"
+        }
+    );
 
-function renderRoster() {
+    const data = await response.json();
 
-  const term = search.value.toLowerCase();
-  const filter = classFilter.value;
+    return data.access_token;
+}
 
-  roster.innerHTML = "";
+async function getGuildRoster(token) {
 
-  members
-    .filter(member => {
-      const matchesSearch =
-        member.name.toLowerCase().includes(term);
+    const url =
+        `https://eu.api.blizzard.com/data/wow/guild/${GUILD_REALM}/${GUILD_NAME}/roster?namespace=profile-eu&locale=en_GB&access_token=${token}`;
 
-      const matchesClass =
-        filter === "all" || member.class === filter;
+    const response = await fetch(url);
 
-      return matchesSearch && matchesClass;
-    })
-    .forEach(member => {
+    return await response.json();
+}
 
-      const card = document.createElement("div");
-      card.className = "member-card";
+function renderRoster(members) {
 
-      card.innerHTML = `
-        <div class="member-top"
-             style="background-image:url('${member.image}')">
+    roster.innerHTML = "";
 
-          <div class="class-badge ${member.class}">
-            ${member.class.replace("-", " ")}
-          </div>
-        </div>
+    members.forEach(member => {
 
-        <div class="member-info">
+        const name = member.character.name;
+        const level = member.character.level;
+        const realm = member.character.realm.slug;
+        const rank = member.rank;
 
-          <div class="member-name">
-            ${member.name}
-          </div>
+        const card = document.createElement("div");
 
-          <div class="member-rank">
-            ${member.rank}
-          </div>
+        card.className = "member-card";
 
-          <div class="member-stats">
-            <span>iLvl ${member.ilvl}</span>
-            <span>${member.rio} IO</span>
-          </div>
+        card.innerHTML = `
+            <div class="member-info">
 
-          <div class="member-links">
-            <a href="#">Armory</a>
-            <a href="#">Raider.IO</a>
-          </div>
+                <div class="member-name">
+                    ${name}
+                </div>
 
-        </div>
-      `;
+                <div class="member-rank">
+                    Rank ${rank}
+                </div>
 
-      roster.appendChild(card);
+                <div class="member-stats">
+                    <span>Level ${level}</span>
+                    <span>${realm}</span>
+                </div>
+
+            </div>
+        `;
+
+        roster.appendChild(card);
     });
 }
 
-search.addEventListener("input", renderRoster);
-classFilter.addEventListener("change", renderRoster);
+async function init() {
 
-renderRoster();
+    try {
+
+        const token = await getAccessToken();
+
+        const guildData = await getGuildRoster(token);
+
+        renderRoster(guildData.members);
+
+    } catch (err) {
+
+        console.error(err);
+
+        roster.innerHTML =
+            "<p style='padding:20px'>Failed to load roster.</p>";
+    }
+}
+
+init();
