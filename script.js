@@ -3,7 +3,7 @@ const roster = document.getElementById("roster");
 async function loadRoster() {
 
     const response = await fetch(
-        "https://dark-wolves-api.lowesfamily.workers.dev/"
+        "https://dark-wolves-api.lowesfamily.workers.dev"
     );
 
     const guildData = await response.json();
