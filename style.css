@@ -153,3 +153,42 @@ header p {
 .druid { background: #FF7D0A; }
 .demon-hunter { background: #A330C9; }
 .evoker { background: #33937F; }
+/* Guild Statistics Bar */
+
+.member-count {
+    max-width: 1400px;
+    margin: 0 auto 20px auto;
+    padding: 14px 24px;
+
+    background: linear-gradient(
+        180deg,
+        rgba(40, 50, 65, 0.95),
+        rgba(20, 28, 40, 0.95)
+    );
+
+    border: 1px solid rgba(255, 204, 0, 0.25);
+    border-radius: 12px;
+
+    color: #ffcc66;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 1px;
+
+    text-align: center;
+
+    box-shadow:
+        0 0 12px rgba(255, 204, 0, 0.08),
+        inset 0 1px 0 rgba(255,255,255,0.05);
+
+    backdrop-filter: blur(8px);
+}
+
+.member-count::before {
+    content: "🐺 ";
+    opacity: 0.9;
+}
+
+.member-count::after {
+    content: " Members";
+    opacity: 0.8;
+}
