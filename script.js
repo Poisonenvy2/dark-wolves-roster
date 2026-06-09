@@ -1,14 +1,19 @@
 const roster = document.getElementById("roster");
+let allMembers = [];
 
 async function loadRoster() {
 
     const response = await fetch(
-        "https://dark-wolves-api.lowesfamily.workers.dev"
+        "YOUR_WORKER_URL"
     );
 
     const guildData = await response.json();
 
-    renderRoster(guildData.members);
+    allMembers = guildData.members;
+
+    populateClassFilter();
+
+    renderRoster(allMembers);
 }
 
 function renderRoster(members) {
