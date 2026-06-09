@@ -1,1 +1,155 @@
+* {
+    box-sizing: border-box;
+}
 
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0b0f16;
+    color: white;
+    overflow-x: hidden;
+}
+
+.background {
+    position: fixed;
+    inset: 0;
+    background:
+        linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)),
+        url('https://images.blz-contentstack.com/v3/assets/blt3452e3b114fab0cd/blt0a0a91a8df5f9a4d/dragonflight.jpg');
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+}
+
+header {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 48px;
+    letter-spacing: 2px;
+}
+
+header p {
+    color: #aaa;
+    margin-top: 10px;
+}
+
+.toolbar {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    padding: 20px;
+    flex-wrap: wrap;
+}
+
+.toolbar input,
+.toolbar select {
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: #1b2430;
+    color: white;
+    min-width: 220px;
+}
+
+.roster-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    padding: 30px;
+    max-width: 1400px;
+    margin: auto;
+}
+
+.member-card {
+    background: rgba(20, 28, 40, 0.88);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px;
+    overflow: hidden;
+    transition: 0.2s ease;
+    backdrop-filter: blur(8px);
+}
+
+.member-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255,255,255,0.2);
+}
+
+.member-top {
+    height: 120px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.class-badge {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: bold;
+    color: black;
+}
+
+.member-info {
+    padding: 18px;
+}
+
+.member-name {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.member-rank {
+    color: #999;
+    margin-top: 5px;
+}
+
+.member-stats {
+    margin-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.member-links {
+    margin-top: 18px;
+    display: flex;
+    gap: 10px;
+}
+
+.member-links a {
+    flex: 1;
+    text-align: center;
+    text-decoration: none;
+    background: #2c3b52;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    transition: 0.2s;
+}
+
+.member-links a:hover {
+    background: #41597c;
+}
+
+/* WoW Class Colours */
+
+.warrior { background: #C79C6E; }
+.paladin { background: #F58CBA; }
+.hunter { background: #ABD473; }
+.rogue { background: #FFF569; }
+.priest { background: #FFFFFF; }
+.death-knight { background: #C41F3B; }
+.shaman { background: #0070DE; }
+.mage { background: #69CCF0; }
+.warlock { background: #9482C9; }
+.monk { background: #00FF96; }
+.druid { background: #FF7D0A; }
+.demon-hunter { background: #A330C9; }
+.evoker { background: #33937F; }
