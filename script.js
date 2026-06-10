@@ -161,33 +161,33 @@ function renderRoster() {
 
                 <td class="rank">
     ${player["Guild Rank"].replace(/^\d+\.\s*/, "")}
+<td>
+    ${player.Level}
 </td>
 
-                <td>
-                    ${player.Level}
-                </td>
+<td class="ilvl">
+    ${player["e-ilevel"] || player.Ilevel || "-"}
+</td>
 
-                <td class="role">
-                    ${player.Role}
-                </td>
+<td class="mplus">
+    ${player["M+"] || "-"}
+</td>
 
-                <td class="ilvl">
-                    ${player.Ilevel}
-                </td>
+<td>
+    ${player.PvP || "-"}
+</td>
 
-                <td class="mplus">
-                    ${player["M+"] || "-"}
-                </td>
+<td>
+    ${player.Honor || "-"}
+</td>
 
-                <td>
-                    ${player.Achievement}
-                </td>
+<td>
+    ${player["Guild Chars"] || "-"}
+</td>
 
-                <td>
-                    ${player.Date}
-                </td>
-
-            </tr>
+<td>
+    ${player.Date}
+</td>
         `;
     });
 }
