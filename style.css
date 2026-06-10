@@ -1,193 +1,151 @@
-* {
-    box-sizing: border-box;
-}
-
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: #0b0f16;
-    color: white;
-    overflow-x: hidden;
+    padding: 0;
+
+    background: #0f1318;
+    color: #ffffff;
+
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-.background {
-    position: fixed;
-    inset: 0;
-    background:
-        linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)),
-        url('https://images.blz-contentstack.com/v3/assets/blt3452e3b114fab0cd/blt0a0a91a8df5f9a4d/dragonflight.jpg');
-    background-size: cover;
-    background-position: center;
-    z-index: -1;
+.container {
+    max-width: 1600px;
+    margin: auto;
+    padding: 20px;
 }
 
 header {
     text-align: center;
-    padding: 40px 20px;
+    margin-bottom: 30px;
 }
 
 header h1 {
-    margin: 0;
-    font-size: 48px;
-    letter-spacing: 2px;
+    color: #ffcc66;
+    margin-bottom: 5px;
 }
 
 header p {
-    color: #aaa;
-    margin-top: 10px;
+    color: #bbbbbb;
 }
 
 .toolbar {
     display: flex;
-    gap: 15px;
-    justify-content: center;
-    padding: 20px;
+    gap: 10px;
     flex-wrap: wrap;
+    margin-bottom: 20px;
 }
 
 .toolbar input,
 .toolbar select {
-    padding: 12px;
-    border-radius: 10px;
-    border: none;
-    background: #1b2430;
+
+    background: #1a222c;
     color: white;
-    min-width: 220px;
-}
 
-.roster-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 20px;
-    padding: 30px;
-    max-width: 1400px;
-    margin: auto;
-}
+    border: 1px solid #444;
+    border-radius: 6px;
 
-.member-card {
-    background: rgba(20, 28, 40, 0.88);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 18px;
-    overflow: hidden;
-    transition: 0.2s ease;
-    backdrop-filter: blur(8px);
-}
-
-.member-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(255,255,255,0.2);
-}
-
-.member-top {
-    height: 120px;
-    background-size: cover;
-    background-position: center;
-    position: relative;
-}
-
-.class-badge {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    padding: 6px 10px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: bold;
-    color: black;
-}
-
-.member-info {
-    padding: 18px;
-}
-
-.member-name {
-    font-size: 22px;
-    font-weight: bold;
-}
-
-.member-rank {
-    color: #999;
-    margin-top: 5px;
-}
-
-.member-stats {
-    margin-top: 16px;
-    display: flex;
-    justify-content: space-between;
-    font-size: 14px;
-}
-
-.member-links {
-    margin-top: 18px;
-    display: flex;
-    gap: 10px;
-}
-
-.member-links a {
-    flex: 1;
-    text-align: center;
-    text-decoration: none;
-    background: #2c3b52;
-    color: white;
     padding: 10px;
-    border-radius: 10px;
-    transition: 0.2s;
 }
 
-.member-links a:hover {
-    background: #41597c;
+.toolbar input {
+    flex: 1;
+    min-width: 250px;
 }
-
-/* WoW Class Colours */
-
-.warrior { background: #C79C6E; }
-.paladin { background: #F58CBA; }
-.hunter { background: #ABD473; }
-.rogue { background: #FFF569; }
-.priest { background: #FFFFFF; }
-.death-knight { background: #C41F3B; }
-.shaman { background: #0070DE; }
-.mage { background: #69CCF0; }
-.warlock { background: #9482C9; }
-.monk { background: #00FF96; }
-.druid { background: #FF7D0A; }
-.demon-hunter { background: #A330C9; }
-.evoker { background: #33937F; }
-/* Guild Statistics Bar */
 
 .member-count {
-    max-width: 1400px;
-    margin: 0 auto 20px auto;
-    padding: 14px 24px;
 
-    background: linear-gradient(
-        180deg,
-        rgba(40, 50, 65, 0.95),
-        rgba(20, 28, 40, 0.95)
-    );
+    margin-bottom: 20px;
 
-    border: 1px solid rgba(255, 204, 0, 0.25);
-    border-radius: 12px;
+    background: #1a222c;
+
+    padding: 12px;
+
+    border-radius: 8px;
 
     color: #ffcc66;
-    font-size: 18px;
+
     font-weight: bold;
-    letter-spacing: 1px;
-
-    text-align: center;
-
-    box-shadow:
-        0 0 12px rgba(255, 204, 0, 0.08),
-        inset 0 1px 0 rgba(255,255,255,0.05);
-
-    backdrop-filter: blur(8px);
 }
 
-.member-count::before {
-    content: "🐺 ";
-    opacity: 0.9;
+.table-wrapper {
+    overflow-x: auto;
 }
 
-.member-count::after {
-    content: "";
+#rosterTable {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    background: #161c24;
+}
+
+#rosterTable th {
+
+    text-align: left;
+
+    padding: 14px;
+
+    background: #1f2732;
+
+    color: #ffcc66;
+
+    position: sticky;
+    top: 0;
+}
+
+#rosterTable td {
+
+    padding: 12px 14px;
+
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+#rosterTable tr:hover {
+
+    background: rgba(255,255,255,0.04);
+}
+
+.character-name {
+
+    font-weight: bold;
+}
+
+.character-spec {
+
+    font-size: 12px;
+
+    color: #999;
+}
+
+.rank {
+
+    color: #ffcc66;
+}
+
+.role {
+
+    color: #8fd3ff;
+}
+
+.ilvl {
+
+    color: #7dff7d;
+}
+
+.mplus {
+
+    color: #c98cff;
+}
+
+@media (max-width: 900px) {
+
+    #rosterTable {
+        font-size: 14px;
+    }
+
+    #rosterTable th,
+    #rosterTable td {
+        padding: 8px;
+    }
 }
