@@ -24,14 +24,6 @@
             placeholder="Search characters..."
         >
 
-        <select id="sortBy">
-            <option value="rank">Guild Rank</option>
-            <option value="name">Character Name</option>
-            <option value="ilevel">Item Level</option>
-            <option value="mplus">Mythic+</option>
-            <option value="achievement">Achievements</option>
-        </select>
-
     </div>
 
     <div id="memberCount" class="member-count">
@@ -43,18 +35,18 @@
         <table id="rosterTable">
 
             <thead>
-                <tr>
-    <th>Character</th>
-    <th>Rank</th>
-    <th>Level</th>
-    <th>iLvl</th>
-    <th>M+</th>
-    <th>PvP</th>
-    <th>Honor</th>
-    <th>Achievements</th>
-    <th>Last Online</th>
+<tr>
+    <th data-sort="name">Character</th>
+    <th data-sort="rank">Rank</th>
+    <th data-sort="level">Level</th>
+    <th data-sort="ilevel">iLvl</th>
+    <th data-sort="mplus">M+</th>
+    <th data-sort="pvp">PvP</th>
+    <th data-sort="honor">Honor</th>
+    <th data-sort="achievement">Achievements</th>
+    <th data-sort="date">Last Online</th>
 </tr>
-            </thead>
+</thead>
 
             <tbody id="rosterBody"></tbody>
 
