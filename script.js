@@ -3,14 +3,27 @@ const CSV_URL =
 
 let rosterData = [];
 
+let currentSort = "rank";
+let sortAscending = true;
+
 async function loadRoster() {
 
-    const response = await fetch(CSV_URL);
-    const csv = await response.text();
+    try {
 
-    parseCSV(csv);
+        const response = await fetch(CSV_URL);
+        const csv = await response.text();
 
-    renderRoster();
+        parseCSV(csv);
+
+        renderRoster();
+
+    } catch (error) {
+
+        console.error(error);
+
+        document.getElementById("memberCount").innerHTML =
+            "Failed to load roster";
+    }
 }
 
 function parseCSV(csv) {
@@ -84,112 +97,143 @@ function renderRoster() {
             .value
             .toLowerCase();
 
-    const sort =
-        document.getElementById("sortBy")
-            .value;
-
     let filtered =
         rosterData.filter(player =>
-            player.Name.toLowerCase()
+            (player.Name || "")
+                .toLowerCase()
                 .includes(search)
         );
 
-    switch(sort) {
+    switch(currentSort) {
 
         case "name":
             filtered.sort((a,b)=>
-                a.Name.localeCompare(b.Name)
+                (a.Name || "")
+                    .localeCompare(b.Name || "")
+            );
+            break;
+
+        case "rank":
+            filtered.sort((a,b)=>
+                (a["Guild Rank"] || "")
+                    .localeCompare(b["Guild Rank"] || "")
+            );
+            break;
+
+        case "level":
+            filtered.sort((a,b)=>
+                Number(b.Level || 0) -
+                Number(a.Level || 0)
             );
             break;
 
         case "ilevel":
             filtered.sort((a,b)=>
-                Number(b.Ilevel) -
-                Number(a.Ilevel)
+                Number(b["e-ilevel"] || b.Ilevel || 0) -
+                Number(a["e-ilevel"] || a.Ilevel || 0)
             );
             break;
 
         case "mplus":
             filtered.sort((a,b)=>
-                Number(b["M+"]) -
-                Number(a["M+"])
+                Number(b["M+"] || 0) -
+                Number(a["M+"] || 0)
+            );
+            break;
+
+        case "pvp":
+            filtered.sort((a,b)=>
+                Number(b.PvP || 0) -
+                Number(a.PvP || 0)
+            );
+            break;
+
+        case "honor":
+            filtered.sort((a,b)=>
+                Number(b.Honor || 0) -
+                Number(a.Honor || 0)
             );
             break;
 
         case "achievement":
             filtered.sort((a,b)=>
-                Number(b.Achievement) -
-                Number(a.Achievement)
+                Number(b.Achievement || 0) -
+                Number(a.Achievement || 0)
             );
             break;
 
-        default:
+        case "date":
             filtered.sort((a,b)=>
-                a["Guild Rank"]
-                    .localeCompare(
-                        b["Guild Rank"]
-                    )
+                new Date(b.Date) -
+                new Date(a.Date)
             );
+            break;
     }
 
-    document.getElementById(
-        "memberCount"
-    ).innerHTML =
+    if (!sortAscending) {
+        filtered.reverse();
+    }
+
+    document.getElementById("memberCount").innerHTML =
         `🐺 ${filtered.length} members found`;
 
     const tbody =
-        document.getElementById(
-            "rosterBody"
-        );
+        document.getElementById("rosterBody");
 
     tbody.innerHTML = "";
 
-    console.log(Object.keys(rosterData[0]));
-    
     filtered.forEach(player => {
+
+        const rank =
+            (player["Guild Rank"] || "")
+                .replace(/^\d+\.\s*/, "");
 
         tbody.innerHTML += `
             <tr>
 
                 <td>
                     <div class="character-name">
-                        ${player.Name}
+                        ${player.Name || ""}
                     </div>
 
                     <div class="character-spec">
-                        ${player.Spec} ${player.Class}
+                        ${player.Spec || ""} ${player.Class || ""}
                     </div>
                 </td>
 
                 <td class="rank">
-    ${player["Guild Rank"].replace(/^\d+\.\s*/, "")}
-<td>
-    ${player.Level}
-</td>
+                    ${rank}
+                </td>
 
-<td class="ilvl">
-    ${player["e-ilevel"] || player.Ilevel || "-"}
-</td>
+                <td>
+                    ${player.Level || "-"}
+                </td>
 
-<td class="mplus">
-    ${player["M+"] || "-"}
-</td>
+                <td class="ilvl">
+                    ${player["e-ilevel"] || player.Ilevel || "-"}
+                </td>
 
-<td>
-    ${player.PvP || "-"}
-</td>
+                <td class="mplus">
+                    ${player["M+"] || "-"}
+                </td>
 
-<td>
-    ${player.Honor || "-"}
-</td>
+                <td>
+                    ${player.PvP || "-"}
+                </td>
 
-<td>
-    ${player.Achievement || "-"}
-</td>
+                <td>
+                    ${player.Honor || "-"}
+                </td>
 
-<td>
-    ${player.Date}
-</td>
+                <td>
+                    ${player.Achievement || "-"}
+                </td>
+
+                <td>
+                    ${player.Date || "-"}
+                </td>
+
+            </tr>
         `;
     });
 }
@@ -200,10 +244,30 @@ document.getElementById("search")
         renderRoster
     );
 
-document.getElementById("sortBy")
-    .addEventListener(
-        "change",
-        renderRoster
-    );
+document
+    .querySelectorAll("th[data-sort]")
+    .forEach(header => {
+
+        header.addEventListener("click", () => {
+
+            const newSort =
+                header.dataset.sort;
+
+            if (currentSort === newSort) {
+
+                sortAscending =
+                    !sortAscending;
+
+            } else {
+
+                currentSort =
+                    newSort;
+
+                sortAscending = true;
+            }
+
+            renderRoster();
+        });
+    });
 
 loadRoster();
