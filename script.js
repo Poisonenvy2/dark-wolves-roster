@@ -184,7 +184,7 @@ function renderRoster() {
 </td>
 
 <td>
-    ${player["Guild Chars"] || "-"}
+    ${player.Achievement || "-"}
 </td>
 
 <td>
