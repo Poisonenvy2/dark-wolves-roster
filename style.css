@@ -149,3 +149,11 @@ header p {
         padding: 8px;
     }
 }
+#rosterTable th {
+    cursor: pointer;
+    user-select: none;
+}
+
+#rosterTable th:hover {
+    color: #ffffff;
+}
