@@ -157,3 +157,12 @@ header p {
 #rosterTable th:hover {
     color: #ffffff;
 }
+#rosterTable th {
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.2s;
+}
+
+#rosterTable th:hover {
+    color: #ffffff;
+}
