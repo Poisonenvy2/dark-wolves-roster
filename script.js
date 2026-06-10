@@ -15,7 +15,8 @@ async function loadRoster() {
 
         parseCSV(csv);
 
-        renderRoster();
+       updateSortArrows();
+renderRoster();
 
     } catch (error) {
 
@@ -89,7 +90,31 @@ function parseCSV(csv) {
             return obj;
         });
 }
+function updateSortArrows() {
 
+    document
+        .querySelectorAll("th[data-sort]")
+        .forEach(header => {
+
+            const sortType =
+                header.dataset.sort;
+
+            const cleanText =
+                header.textContent
+                    .replace(" ▲", "")
+                    .replace(" ▼", "");
+
+            header.textContent = cleanText;
+
+            if (sortType === currentSort) {
+
+                header.textContent +=
+                    sortAscending
+                        ? " ▲"
+                        : " ▼";
+            }
+        });
+}
 function renderRoster() {
 
     const search =
@@ -174,6 +199,8 @@ function renderRoster() {
         filtered.reverse();
     }
 
+updateSortArrows();
+    
     document.getElementById("memberCount").innerHTML =
         `🐺 ${filtered.length} members found`;
 
