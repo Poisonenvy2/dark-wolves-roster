@@ -160,8 +160,8 @@ function renderRoster() {
                 </td>
 
                 <td class="rank">
-                    ${player["Guild Rank"]}
-                </td>
+    ${player["Guild Rank"].replace(/^\d+\.\s*/, "")}
+</td>
 
                 <td>
                     ${player.Level}
