@@ -1,155 +1,169 @@
-const roster = document.getElementById("roster");
+const CSV_URL =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vRi9Ru-QPb3sPlWmGZHt7iX2Ds3c7C3Gj43RB0dDKImpzW6Ln2ZCxHro9CPFfzOMKU_KA5SgltXwj-_/pub?output=csv";
 
-let allMembers = [];
-
-const rankNames = {
-    0: "Alpha",
-    1: "Beta",
-    2: "Beauwolf",
-    3: "Werewolf",
-    4: "Wolf",
-    5: "Wolf Alt",
-    6: "Juvenile",
-    7: "Cub",
-    8: "MiA",
-    9: "Pup"
-};
-
-const rankColours = {
-    0: "#ffcc00", // Alpha
-    1: "#ff8800", // Beta
-    2: "#66ccff", // Beauwolf
-    3: "#66ff66", // Werewolf
-    4: "#ffffff", // Wolf
-    5: "#cccccc", // Wolf Alt
-    6: "#99ff99", // Juvenile
-    7: "#99ccff", // Cub
-    8: "#ff6666", // MiA
-    9: "#dddddd"  // Pup
-};
-
-const WORKER_URL =
-    "https://dark-wolves-api.lowesfamily.workers.dev";
+let rosterData = [];
 
 async function loadRoster() {
 
-    try {
+    const response = await fetch(CSV_URL);
+    const csv = await response.text();
 
-        const response = await fetch(WORKER_URL);
+    parseCSV(csv);
 
-        if (!response.ok) {
-            throw new Error(
-                `HTTP Error ${response.status}`
-            );
-        }
-
-        const guildData = await response.json();
-
-        allMembers = guildData.members;
-
-        renderRoster(allMembers);
-
-    } catch (err) {
-
-        console.error(err);
-
-        roster.innerHTML = `
-            <div style="padding:20px;">
-                Failed to load roster.<br><br>
-                ${err.message}
-            </div>
-        `;
-    }
+    renderRoster();
 }
 
-function renderRoster(members) {
+function parseCSV(csv) {
 
-    roster.innerHTML = "";
+    const rows = csv.split("\n");
 
-    const searchText =
+    const headers =
+        rows[1]
+            .split(",")
+            .map(h => h.trim());
+
+    rosterData = rows
+        .slice(2)
+        .filter(row => row.trim() !== "")
+        .map(row => {
+
+            const cols = row.split(",");
+
+            let obj = {};
+
+            headers.forEach((header, index) => {
+                obj[header] = cols[index] || "";
+            });
+
+            return obj;
+        });
+}
+
+function renderRoster() {
+
+    const search =
         document.getElementById("search")
             .value
             .toLowerCase();
 
-    const sortBy =
+    const sort =
         document.getElementById("sortBy")
             .value;
 
-    let filteredMembers = members.filter(member => {
-
-        return member.character.name
-            .toLowerCase()
-            .includes(searchText);
-
-    });
-
-    if (sortBy === "name") {
-
-        filteredMembers.sort((a, b) =>
-            a.character.name.localeCompare(
-                b.character.name
-            )
+    let filtered =
+        rosterData.filter(player =>
+            player.Name.toLowerCase()
+                .includes(search)
         );
 
-    } else if (sortBy === "rank") {
+    switch(sort) {
 
-        filteredMembers.sort((a, b) =>
-            a.rank - b.rank
-        );
+        case "name":
+            filtered.sort((a,b)=>
+                a.Name.localeCompare(b.Name)
+            );
+            break;
 
+        case "ilevel":
+            filtered.sort((a,b)=>
+                Number(b.Ilevel) -
+                Number(a.Ilevel)
+            );
+            break;
+
+        case "mplus":
+            filtered.sort((a,b)=>
+                Number(b["M+"]) -
+                Number(a["M+"])
+            );
+            break;
+
+        case "achievement":
+            filtered.sort((a,b)=>
+                Number(b.Achievement) -
+                Number(a.Achievement)
+            );
+            break;
+
+        default:
+            filtered.sort((a,b)=>
+                a["Guild Rank"]
+                    .localeCompare(
+                        b["Guild Rank"]
+                    )
+            );
     }
-document.getElementById("memberCount").innerHTML =
-    `${filteredMembers.length} members found`;
-    filteredMembers.forEach(member => {
 
-        const character = member.character;
+    document.getElementById(
+        "memberCount"
+    ).innerHTML =
+        `🐺 ${filtered.length} members found`;
 
-        const card = document.createElement("div");
+    const tbody =
+        document.getElementById(
+            "rosterBody"
+        );
 
-        card.className = "member-card";
+    tbody.innerHTML = "";
 
-        card.innerHTML = `
+    filtered.forEach(player => {
 
-            <div class="member-info">
+        tbody.innerHTML += `
+            <tr>
 
-                <div class="member-name">
-    <a
-        href="https://worldofwarcraft.blizzard.com/en-gb/character/eu/${character.realm.slug}/${character.name.toLowerCase()}"
-        target="_blank"
-        style="color:inherit;text-decoration:none;"
-    >
-        ${character.name}
-    </a>
-</div>
+                <td>
+                    <div class="character-name">
+                        ${player.Name}
+                    </div>
 
-                <div
-    class="member-rank"
-    style="color:${rankColours[member.rank] || '#ffffff'}"
->
-    ${rankNames[member.rank] || `Rank ${member.rank}`}
-</div>
+                    <div class="character-spec">
+                        ${player.Spec} ${player.Class}
+                    </div>
+                </td>
 
-                <div class="member-stats">
-                    <span>Level ${character.level}</span>
-                    <span>${character.realm.slug}</span>
-                </div>
+                <td class="rank">
+                    ${player["Guild Rank"]}
+                </td>
 
-            </div>
+                <td>
+                    ${player.Level}
+                </td>
 
+                <td class="role">
+                    ${player.Role}
+                </td>
+
+                <td class="ilvl">
+                    ${player.Ilevel}
+                </td>
+
+                <td class="mplus">
+                    ${player["M+"] || "-"}
+                </td>
+
+                <td>
+                    ${player.Achievement}
+                </td>
+
+                <td>
+                    ${player.Date}
+                </td>
+
+            </tr>
         `;
-
-        roster.appendChild(card);
     });
 }
 
 document.getElementById("search")
-    .addEventListener("input", () => {
-        renderRoster(allMembers);
-    });
+    .addEventListener(
+        "input",
+        renderRoster
+    );
 
 document.getElementById("sortBy")
-    .addEventListener("change", () => {
-        renderRoster(allMembers);
-    });
+    .addEventListener(
+        "change",
+        renderRoster
+    );
 
 loadRoster();
