@@ -143,6 +143,8 @@ function renderRoster() {
         );
 
     tbody.innerHTML = "";
+
+    console.log(Object.keys(rosterData[0]));
     
     filtered.forEach(player => {
 
