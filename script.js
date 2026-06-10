@@ -105,7 +105,7 @@ function renderRoster() {
         );
 
     tbody.innerHTML = "";
-
+console.log(rosterData[0]);
     filtered.forEach(player => {
 
         tbody.innerHTML += `
