@@ -1,34 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Wolves Roster</title>
 
-  <title>Dark Wolves Roster</title>
-
-  <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div class="background"></div>
+<div class="container">
 
-  <header>
-    <h1>Dark Wolves</h1>
-    <p>Tarren Mill EU</p>
-  </header>
+    <header>
+        <h1>🐺 Dark Wolves</h1>
+        <p>Tarren Mill EU</p>
+    </header>
 
-  <div class="toolbar">
-    <input type="text" id="search" placeholder="Search players...">
+    <div class="toolbar">
 
-<select id="sortBy">
-    <option value="rank">Sort by Guild Rank</option>
-    <option value="name">Sort Alphabetically</option>
-</select>
-  </div>
-<div id="memberCount" class="member-count"></div>
-  <div id="roster" class="roster-grid"></div>
+        <input
+            type="text"
+            id="search"
+            placeholder="Search characters..."
+        >
 
-  <script src="script.js"></script>
+        <select id="sortBy">
+            <option value="rank">Guild Rank</option>
+            <option value="name">Character Name</option>
+            <option value="ilevel">Item Level</option>
+            <option value="mplus">Mythic+</option>
+            <option value="achievement">Achievements</option>
+        </select>
+
+    </div>
+
+    <div id="memberCount" class="member-count">
+        Loading roster...
+    </div>
+
+    <div class="table-wrapper">
+
+        <table id="rosterTable">
+
+            <thead>
+                <tr>
+                    <th>Character</th>
+                    <th>Rank</th>
+                    <th>Level</th>
+                    <th>Role</th>
+                    <th>iLvl</th>
+                    <th>M+</th>
+                    <th>Achievements</th>
+                    <th>Last Online</th>
+                </tr>
+            </thead>
+
+            <tbody id="rosterBody"></tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
 
 </body>
 </html>
