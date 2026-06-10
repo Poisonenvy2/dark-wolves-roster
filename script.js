@@ -15,24 +15,62 @@ async function loadRoster() {
 
 function parseCSV(csv) {
 
-    const rows = csv.split("\n");
+    const rows = [];
+    let currentRow = [];
+    let currentValue = "";
+    let inQuotes = false;
 
-    const headers =
-        rows[1]
-            .split(",")
-            .map(h => h.trim());
+    for (let i = 0; i < csv.length; i++) {
+
+        const char = csv[i];
+
+        if (char === '"') {
+
+            inQuotes = !inQuotes;
+
+        } else if (char === ',' && !inQuotes) {
+
+            currentRow.push(currentValue);
+            currentValue = "";
+
+        } else if ((char === '\n' || char === '\r') && !inQuotes) {
+
+            if (currentValue !== "" || currentRow.length > 0) {
+
+                currentRow.push(currentValue);
+                rows.push(currentRow);
+
+                currentRow = [];
+                currentValue = "";
+            }
+
+        } else {
+
+            currentValue += char;
+        }
+    }
+
+    if (currentValue !== "" || currentRow.length > 0) {
+
+        currentRow.push(currentValue);
+        rows.push(currentRow);
+    }
+
+    const headers = rows[1];
 
     rosterData = rows
         .slice(2)
-        .filter(row => row.trim() !== "")
+        .filter(row => row.length > 5)
         .map(row => {
-
-            const cols = row.split(",");
 
             let obj = {};
 
             headers.forEach((header, index) => {
-                obj[header] = cols[index] || "";
+
+                obj[header.trim()] =
+                    row[index]
+                        ? row[index].trim()
+                        : "";
             });
 
             return obj;
@@ -105,7 +143,7 @@ function renderRoster() {
         );
 
     tbody.innerHTML = "";
-console.log(rosterData[0]);
+    
     filtered.forEach(player => {
 
         tbody.innerHTML += `
