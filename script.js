@@ -1,5 +1,3 @@
-const CSV_URL =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vRi9Ru-QPb3sPlWmGZHt7iX2Ds3c7C3Gj43RB0dDKImpzW6Ln2ZCxHro9CPFfzOMKU_KA5SgltXwj-_/pub?output=csv";
 
 const ROSTER_URL =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vQJJaRDHCytwmA2_Wo6Y71CL8anXRCRBGYjlkleoFkHiISJOiL3cd-t-zp7G9KkaWQqE5ykRJjGS8Y-/pub?output=csv";
