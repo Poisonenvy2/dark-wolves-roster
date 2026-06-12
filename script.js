@@ -349,7 +349,7 @@ console.log(player);
 </td>
 
 <td>
-    ${player["Days Ago"] || "-"}d
+    ${player.Achievement || "-"}
 </td>
 
             </tr>
