@@ -338,12 +338,17 @@ updateSortArrows();
                 </td>
 
                 <td>
-                    ${player.Achievement || "-"}
-                </td>
+    ${
+        raidData[
+            (player.Name || "")
+                .toLowerCase()
+        ] || "-"
+    }
+</td>
 
                 <td>
-                    ${player.Date || "-"}
-                </td>
+    ${player["Days Ago"] || "-"}d
+</td>
 
             </tr>
         `;
