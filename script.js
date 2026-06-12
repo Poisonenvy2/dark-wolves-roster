@@ -293,7 +293,9 @@ updateSortArrows();
         document.getElementById("rosterBody");
 
     tbody.innerHTML = "";
-
+    
+console.log(player);
+    
     filtered.forEach(player => {
 
         const rank =
