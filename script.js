@@ -1,6 +1,6 @@
 
 const ROSTER_URL =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vQJJaRDHCytwmA2_Wo6Y71CL8anXRCRBGYjlkleoFkHiISJOiL3cd-t-zp7G9KkaWQqE5ykRJjGS8Y-/pub?output=csv";
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vQJJaRDHCytwmA2_Wo6Y71CL8anXRCRBGYjlkleoFkHiISJOiL3cd-t-zp7G9KkaWQqE5ykRJjGS8Y-/pub?gid=1275702952&single=true&output=csv";
 
 const RAIDS_URL =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vQJJaRDHCytwmA2_Wo6Y71CL8anXRCRBGYjlkleoFkHiISJOiL3cd-t-zp7G9KkaWQqE5ykRJjGS8Y-/pub?gid=995475074&single=true&output=csv";
