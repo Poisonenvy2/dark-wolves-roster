@@ -1,6 +1,13 @@
 const CSV_URL =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vRi9Ru-QPb3sPlWmGZHt7iX2Ds3c7C3Gj43RB0dDKImpzW6Ln2ZCxHro9CPFfzOMKU_KA5SgltXwj-_/pub?output=csv";
 
+const ROSTER_URL =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vQJJaRDHCytwmA2_Wo6Y71CL8anXRCRBGYjlkleoFkHiISJOiL3cd-t-zp7G9KkaWQqE5ykRJjGS8Y-/pub?output=csv";
+
+const RAIDS_URL =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vQJJaRDHCytwmA2_Wo6Y71CL8anXRCRBGYjlkleoFkHiISJOiL3cd-t-zp7G9KkaWQqE5ykRJjGS8Y-/pub?gid=995475074&single=true&output=csv";
+
+let raidData = {};
 let rosterData = [];
 
 let currentSort = "rank";
@@ -10,19 +17,31 @@ async function loadRoster() {
 
     try {
 
-        const response = await fetch(CSV_URL);
-        const csv = await response.text();
+        const rosterResponse =
+            await fetch(ROSTER_URL);
 
-        parseCSV(csv);
+        const rosterCsv =
+            await rosterResponse.text();
 
-       updateSortArrows();
-renderRoster();
+        parseCSV(rosterCsv);
+
+        const raidsResponse =
+            await fetch(RAIDS_URL);
+
+        const raidsCsv =
+            await raidsResponse.text();
+
+        loadRaidData(raidsCsv);
+
+        renderRoster();
 
     } catch (error) {
 
         console.error(error);
 
-        document.getElementById("memberCount").innerHTML =
+        document.getElementById(
+            "memberCount"
+        ).innerHTML =
             "Failed to load roster";
     }
 }
@@ -89,6 +108,72 @@ function parseCSV(csv) {
 
             return obj;
         });
+}
+function loadRaidData(csv) {
+
+    const rows = [];
+    let currentRow = [];
+    let currentValue = "";
+    let inQuotes = false;
+
+    for (let i = 0; i < csv.length; i++) {
+
+        const char = csv[i];
+
+        if (char === '"') {
+
+            inQuotes = !inQuotes;
+
+        } else if (char === ',' && !inQuotes) {
+
+            currentRow.push(currentValue);
+            currentValue = "";
+
+        } else if (
+            (char === '\n' || char === '\r')
+            && !inQuotes
+        ) {
+
+            if (
+                currentValue !== ""
+                || currentRow.length > 0
+            ) {
+
+                currentRow.push(currentValue);
+                rows.push(currentRow);
+
+                currentRow = [];
+                currentValue = "";
+            }
+
+        } else {
+
+            currentValue += char;
+        }
+    }
+
+    const headers = rows[1];
+
+    const nameIndex =
+        headers.indexOf("Name");
+
+    const progressIndex =
+        headers.indexOf("Progress");
+
+    rows.slice(2).forEach(row => {
+
+        const name =
+            row[nameIndex];
+
+        const progress =
+            row[progressIndex];
+
+        if (name) {
+
+            raidData[name.toLowerCase()] =
+                progress;
+        }
+    });
 }
 function updateSortArrows() {
 
