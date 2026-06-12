@@ -347,7 +347,7 @@ updateSortArrows();
 </td>
 
                 <td>
-    ${player["Days Ago"] || "-"}d
+    ${player.Date || "-"}
 </td>
 
             </tr>
