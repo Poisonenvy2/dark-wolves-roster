@@ -294,8 +294,6 @@ updateSortArrows();
 
     tbody.innerHTML = "";
     
-console.log(player);
-    
     filtered.forEach(player => {
 
         const rank =
@@ -348,8 +346,8 @@ console.log(player);
     }
 </td>
 
-                <td>
-    ${player.Date || "-"}
+<td>
+    ${player["Days Ago"] || "-"}d
 </td>
 
             </tr>
