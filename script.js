@@ -23,6 +23,8 @@ async function loadRoster() {
 
         parseCSV(rosterCsv);
 
+        console.log(rosterData[0]);
+
         const raidsResponse =
             await fetch(RAIDS_URL);
 
