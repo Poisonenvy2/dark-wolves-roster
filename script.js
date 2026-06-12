@@ -271,13 +271,6 @@ function renderRoster() {
                 Number(a.Achievement || 0)
             );
             break;
-
-        case "date":
-            filtered.sort((a,b)=>
-                new Date(b.Date) -
-                new Date(a.Date)
-            );
-            break;
     }
 
     if (!sortAscending) {
