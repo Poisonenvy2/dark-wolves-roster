@@ -18,10 +18,12 @@ async function loadRoster() {
         const rosterResponse =
             await fetch(ROSTER_URL);
 
-        const rosterCsv =
-            await rosterResponse.text();
+       const rosterCsv =
+    await rosterResponse.text();
 
-        parseCSV(rosterCsv);
+console.log(rosterCsv.substring(0,1000));
+
+parseCSV(rosterCsv);
 
         console.log(rosterData[0]);
 
