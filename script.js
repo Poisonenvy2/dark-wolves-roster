@@ -235,33 +235,33 @@ function renderRoster() {
             );
             break;
 
-        case "ilevel":
-            filtered.sort((a,b)=>
-                Number(b["e-ilevel"] || b.Ilevel || 0) -
-                Number(a["e-ilevel"] || a.Ilevel || 0)
-            );
-            break;
+       case "ilevel":
+    filtered.sort((a,b)=>
+        Number(b["iLvL (Equipped)"] || b["iLvL"] || 0) -
+        Number(a["iLvL (Equipped)"] || a["iLvL"] || 0)
+    );
+    break;
 
         case "mplus":
-            filtered.sort((a,b)=>
-                Number(b["M+"] || 0) -
-                Number(a["M+"] || 0)
-            );
-            break;
+    filtered.sort((a,b)=>
+        Number(b["M+ Rating"] || 0) -
+        Number(a["M+ Rating"] || 0)
+    );
+    break;
 
         case "pvp":
-            filtered.sort((a,b)=>
-                Number(b.PvP || 0) -
-                Number(a.PvP || 0)
-            );
-            break;
+    filtered.sort((a,b)=>
+        Number(b["PvP Rating"] || 0) -
+        Number(a["PvP Rating"] || 0)
+    );
+    break;
 
         case "honor":
-            filtered.sort((a,b)=>
-                Number(b.Honor || 0) -
-                Number(a.Honor || 0)
-            );
-            break;
+    filtered.sort((a,b)=>
+        Number(b["Honor Level"] || 0) -
+        Number(a["Honor Level"] || 0)
+    );
+    break;
 
         case "achievement":
             filtered.sort((a,b)=>
@@ -313,22 +313,22 @@ updateSortArrows();
                 </td>
 
                 <td class="ilvl">
-                    ${player["e-ilevel"] || player.Ilevel || "-"}
-                </td>
+    ${player["iLvL (Equipped)"] || player["iLvL"] || "-"}
+</td>
 
-                <td class="mplus">
-                    ${player["M+"] || "-"}
-                </td>
+<td class="mplus">
+    ${player["M+ Rating"] || "-"}
+</td>
 
-                <td>
-                    ${player.PvP || "-"}
-                </td>
+<td>
+    ${player["PvP Rating"] || "-"}
+</td>
 
-                <td>
-                    ${player.Honor || "-"}
-                </td>
+<td>
+    ${player["Honor Level"] || "-"}
+</td>
 
-                <td>
+<td>
     ${
         raidData[
             (player.Name || "")
@@ -338,7 +338,7 @@ updateSortArrows();
 </td>
 
 <td>
-    ${player.Achievement || "-"}
+    ${player["Achievement"] || "-"}
 </td>
 
             </tr>
