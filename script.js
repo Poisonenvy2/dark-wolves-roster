@@ -384,26 +384,10 @@ const backToTop =
         "backToTop"
     );
 
-window.addEventListener(
-    "scroll",
-    () => {
-
-        if (
-            window.scrollY > 400
-        ) {
-
-            backToTop.classList.add(
-                "show"
-            );
-
-        } else {
-
-            backToTop.classList.remove(
-                "show"
-            );
-        }
-    }
-);
+const backToTop =
+    document.getElementById(
+        "backToTop"
+    );
 
 backToTop.addEventListener(
     "click",
