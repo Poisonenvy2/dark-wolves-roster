@@ -1,11 +1,6 @@
-
 const ROSTER_URL =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vQJJaRDHCytwmA2_Wo6Y71CL8anXRCRBGYjlkleoFkHiISJOiL3cd-t-zp7G9KkaWQqE5ykRJjGS8Y-/pub?gid=1275702952&single=true&output=csv";
 
-const RAIDS_URL =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vQJJaRDHCytwmA2_Wo6Y71CL8anXRCRBGYjlkleoFkHiISJOiL3cd-t-zp7G9KkaWQqE5ykRJjGS8Y-/pub?gid=995475074&single=true&output=csv";
-
-let raidData = {};
 let rosterData = [];
 
 let currentSort = "rank";
@@ -15,25 +10,19 @@ async function loadRoster() {
 
     try {
 
-        const rosterResponse =
+        const response =
             await fetch(ROSTER_URL);
 
-       const rosterCsv =
-    await rosterResponse.text();
+        if (!response.ok) {
+            throw new Error(
+                `HTTP ${response.status}`
+            );
+        }
 
-console.log(rosterCsv.substring(0,1000));
+        const csv =
+            await response.text();
 
-parseCSV(rosterCsv);
-
-        console.log(rosterData[0]);
-
-        const raidsResponse =
-            await fetch(RAIDS_URL);
-
-        const raidsCsv =
-            await raidsResponse.text();
-
-        loadRaidData(raidsCsv);
+        parseCSV(csv);
 
         renderRoster();
 
@@ -63,82 +52,22 @@ function parseCSV(csv) {
 
             inQuotes = !inQuotes;
 
-        } else if (char === ',' && !inQuotes) {
-
-            currentRow.push(currentValue);
-            currentValue = "";
-
-        } else if ((char === '\n' || char === '\r') && !inQuotes) {
-
-            if (currentValue !== "" || currentRow.length > 0) {
-
-                currentRow.push(currentValue);
-                rows.push(currentRow);
-
-                currentRow = [];
-                currentValue = "";
-            }
-
-        } else {
-
-            currentValue += char;
-        }
-    }
-
-    if (currentValue !== "" || currentRow.length > 0) {
-
-        currentRow.push(currentValue);
-        rows.push(currentRow);
-    }
-
-    const headers = rows[1];
-
-    rosterData = rows
-        .slice(2)
-        .filter(row => row.length > 5)
-        .map(row => {
-
-            let obj = {};
-
-            headers.forEach((header, index) => {
-
-                obj[header.trim()] =
-                    row[index]
-                        ? row[index].trim()
-                        : "";
-            });
-
-            return obj;
-        });
-}
-function loadRaidData(csv) {
-
-    const rows = [];
-    let currentRow = [];
-    let currentValue = "";
-    let inQuotes = false;
-
-    for (let i = 0; i < csv.length; i++) {
-
-        const char = csv[i];
-
-        if (char === '"') {
-
-            inQuotes = !inQuotes;
-
-        } else if (char === ',' && !inQuotes) {
+        } else if (
+            char === "," &&
+            !inQuotes
+        ) {
 
             currentRow.push(currentValue);
             currentValue = "";
 
         } else if (
-            (char === '\n' || char === '\r')
-            && !inQuotes
+            (char === "\n" || char === "\r") &&
+            !inQuotes
         ) {
 
             if (
-                currentValue !== ""
-                || currentRow.length > 0
+                currentValue !== "" ||
+                currentRow.length > 0
             ) {
 
                 currentRow.push(currentValue);
@@ -154,33 +83,45 @@ function loadRaidData(csv) {
         }
     }
 
+    if (
+        currentValue !== "" ||
+        currentRow.length > 0
+    ) {
+
+        currentRow.push(currentValue);
+        rows.push(currentRow);
+    }
+
     const headers = rows[1];
 
-    const nameIndex =
-        headers.indexOf("Name");
+    rosterData = rows
+        .slice(2)
+        .filter(row => row.length > 5)
+        .map(row => {
 
-    const progressIndex =
-        headers.indexOf("Progress");
+            const obj = {};
 
-    rows.slice(2).forEach(row => {
+            headers.forEach(
+                (header, index) => {
 
-        const name =
-            row[nameIndex];
+                    obj[
+                        header.trim()
+                    ] = row[index]
+                        ? row[index].trim()
+                        : "";
+                }
+            );
 
-        const progress =
-            row[progressIndex];
-
-        if (name) {
-
-            raidData[name.toLowerCase()] =
-                progress;
-        }
-    });
+            return obj;
+        });
 }
+
 function updateSortArrows() {
 
     document
-        .querySelectorAll("th[data-sort]")
+        .querySelectorAll(
+            "th[data-sort]"
+        )
         .forEach(header => {
 
             const sortType =
@@ -191,9 +132,12 @@ function updateSortArrows() {
                     .replace(" ▲", "")
                     .replace(" ▼", "");
 
-            header.textContent = cleanText;
+            header.textContent =
+                cleanText;
 
-            if (sortType === currentSort) {
+            if (
+                sortType === currentSort
+            ) {
 
                 header.textContent +=
                     sortAscending
@@ -202,10 +146,12 @@ function updateSortArrows() {
             }
         });
 }
+
 function renderRoster() {
 
     const search =
-        document.getElementById("search")
+        document
+            .getElementById("search")
             .value
             .toLowerCase();
 
@@ -221,14 +167,18 @@ function renderRoster() {
         case "name":
             filtered.sort((a,b)=>
                 (a.Name || "")
-                    .localeCompare(b.Name || "")
+                    .localeCompare(
+                        b.Name || ""
+                    )
             );
             break;
 
         case "rank":
             filtered.sort((a,b)=>
                 (a["Guild Rank"] || "")
-                    .localeCompare(b["Guild Rank"] || "")
+                    .localeCompare(
+                        b["Guild Rank"] || ""
+                    )
             );
             break;
 
@@ -239,38 +189,71 @@ function renderRoster() {
             );
             break;
 
-       case "ilevel":
-    filtered.sort((a,b)=>
-        Number(b["iLvL (Equipped)"] || b["iLvL"] || 0) -
-        Number(a["iLvL (Equipped)"] || a["iLvL"] || 0)
-    );
-    break;
+        case "ilevel":
+            filtered.sort((a,b)=>
+                Number(
+                    b["iLvL (Equipped)"] ||
+                    b["iLvL"] ||
+                    0
+                ) -
+                Number(
+                    a["iLvL (Equipped)"] ||
+                    a["iLvL"] ||
+                    0
+                )
+            );
+            break;
 
         case "mplus":
-    filtered.sort((a,b)=>
-        Number(b["M+ Rating"] || 0) -
-        Number(a["M+ Rating"] || 0)
-    );
-    break;
+            filtered.sort((a,b)=>
+                Number(
+                    b["M+ Rating"] || 0
+                ) -
+                Number(
+                    a["M+ Rating"] || 0
+                )
+            );
+            break;
 
         case "pvp":
-    filtered.sort((a,b)=>
-        Number(b["PvP Rating"] || 0) -
-        Number(a["PvP Rating"] || 0)
-    );
-    break;
+            filtered.sort((a,b)=>
+                Number(
+                    b["PvP Rating"] || 0
+                ) -
+                Number(
+                    a["PvP Rating"] || 0
+                )
+            );
+            break;
 
         case "honor":
-    filtered.sort((a,b)=>
-        Number(b["Honor Level"] || 0) -
-        Number(a["Honor Level"] || 0)
-    );
-    break;
-
-        case "achievement":
             filtered.sort((a,b)=>
-                Number(b.Achievement || 0) -
-                Number(a.Achievement || 0)
+                Number(
+                    b["Honor Level"] || 0
+                ) -
+                Number(
+                    a["Honor Level"] || 0
+                )
+            );
+            break;
+
+        case "raid":
+            filtered.sort((a,b)=>
+                (a["Progress"] || "")
+                    .localeCompare(
+                        b["Progress"] || ""
+                    )
+            );
+            break;
+
+        case "achievements":
+            filtered.sort((a,b)=>
+                Number(
+                    b["Achievement"] || 0
+                ) -
+                Number(
+                    a["Achievement"] || 0
+                )
             );
             break;
     }
@@ -279,21 +262,28 @@ function renderRoster() {
         filtered.reverse();
     }
 
-updateSortArrows();
-    
-    document.getElementById("memberCount").innerHTML =
+    updateSortArrows();
+
+    document.getElementById(
+        "memberCount"
+    ).innerHTML =
         `🐺 ${filtered.length} members found`;
 
     const tbody =
-        document.getElementById("rosterBody");
+        document.getElementById(
+            "rosterBody"
+        );
 
     tbody.innerHTML = "";
-    
+
     filtered.forEach(player => {
 
         const rank =
             (player["Guild Rank"] || "")
-                .replace(/^\d+\.\s*/, "");
+                .replace(
+                    /^\d+\.\s*/,
+                    ""
+                );
 
         tbody.innerHTML += `
             <tr>
@@ -304,7 +294,8 @@ updateSortArrows();
                     </div>
 
                     <div class="character-spec">
-                        ${player.Spec || ""} ${player.Class || ""}
+                        ${player.Spec || ""}
+                        ${player.Class || ""}
                     </div>
                 </td>
 
@@ -317,69 +308,73 @@ updateSortArrows();
                 </td>
 
                 <td class="ilvl">
-    ${player["iLvL (Equipped)"] || player["iLvL"] || "-"}
-</td>
+                    ${player["iLvL (Equipped)"] || player["iLvL"] || "-"}
+                </td>
 
-<td class="mplus">
-    ${player["M+ Rating"] || "-"}
-</td>
+                <td class="mplus">
+                    ${player["M+ Rating"] || "-"}
+                </td>
 
-<td>
-    ${player["PvP Rating"] || "-"}
-</td>
+                <td>
+                    ${player["PvP Rating"] || "-"}
+                </td>
 
-<td>
-    ${player["Honor Level"] || "-"}
-</td>
+                <td>
+                    ${player["Honor Level"] || "-"}
+                </td>
 
-<td>
-    ${
-        raidData[
-            (player.Name || "")
-                .toLowerCase()
-        ] || "-"
-    }
-</td>
+                <td>
+                    ${player["Progress"] || "-"}
+                </td>
 
-<td>
-    ${player["Achievement"] || "-"}
-</td>
+                <td>
+                    ${player["Achievement"] || "-"}
+                </td>
 
             </tr>
         `;
     });
 }
 
-document.getElementById("search")
+document
+    .getElementById("search")
     .addEventListener(
         "input",
         renderRoster
     );
 
 document
-    .querySelectorAll("th[data-sort]")
+    .querySelectorAll(
+        "th[data-sort]"
+    )
     .forEach(header => {
 
-        header.addEventListener("click", () => {
+        header.addEventListener(
+            "click",
+            () => {
 
-            const newSort =
-                header.dataset.sort;
+                const newSort =
+                    header.dataset.sort;
 
-            if (currentSort === newSort) {
+                if (
+                    currentSort === newSort
+                ) {
 
-                sortAscending =
-                    !sortAscending;
+                    sortAscending =
+                        !sortAscending;
 
-            } else {
+                } else {
 
-                currentSort =
-                    newSort;
+                    currentSort =
+                        newSort;
 
-                sortAscending = true;
+                    sortAscending =
+                        true;
+                }
+
+                renderRoster();
             }
-
-            renderRoster();
-        });
+        );
     });
 
 loadRoster();
