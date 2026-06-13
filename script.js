@@ -384,11 +384,6 @@ const backToTop =
         "backToTop"
     );
 
-const backToTop =
-    document.getElementById(
-        "backToTop"
-    );
-
 backToTop.addEventListener(
     "click",
     () => {
